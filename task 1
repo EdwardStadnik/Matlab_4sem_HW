@@ -1,0 +1,15 @@
+t1 = -10:0.010:10
+t2 = -15:0.005:-10
+t3 = 10:0.005:15
+x1 = fresnelc(t)
+y1 = fresnels(t)
+x2 = fresnelc(p)
+y2 = fresnels(p)
+x3 = fresnelc(q)
+y3 = fresnels(q)
+hold on
+plot(x1, y1, 'blue')
+plot(x2, y2, 'blue')
+plot(x3, y3, 'blue')
+grid on
+grid minor
