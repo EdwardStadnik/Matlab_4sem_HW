@@ -1,0 +1,59 @@
+function [matrix] = KronigPenney(k_input, m_input, a_input, b_input, U0_input, Emax_input)
+
+global k U0 h m a b Emax e
+
+e = 1.60218 * 10^(-19);
+%h=1.054571817*10^(-27)/((1.602176634*10^(-12)*10^(-14)).^0.5);
+h = 6.626070*10^(-34)/(2*pi);
+a = a_input*10^(-9);
+b = b_input*10^(-9);
+U0 = U0_input*e;
+Emax = Emax_input*e; 
+m = m_input*10^(-3);
+
+f=@F;
+
+final_matrix =[];
+matrix_length = 0;
+
+for i = 1:length(k_input)
+    k = k_input(i)*10^(9);
+    x =[];
+    for jj = U0+(Emax-U0)/1000:(Emax-U0)/5000:Emax
+        x1 = fzero(f, jj);
+        y = true;
+        for kk = 1:length(x)
+            if abs(x(kk) - x1) < (Emax-U0)/1000
+                y = false;
+            end
+        end
+        if (y) && (x1 < Emax)
+            x = [x ; x1];
+        end
+    end
+    x = sort(x);
+    if i == 1
+        final_matrix = x;
+        matrix_length = length(x);
+    else 
+        if matrix_length < length(x)
+            final_matrix = [final_matrix; NaN.*zeros(length(x)-matrix_length, i-1)]; 
+            matrix_length = length(x);
+        else
+            x = [x; NaN.*zeros(matrix_length - length(x), 1)];
+        end
+        
+        final_matrix = [final_matrix, x];
+    end
+end
+
+matrix = final_matrix;
+end
+
+function cos1 = F(E)
+global k U0 h m a b
+mu = (2*m*E/h^2).^0.5;
+lambda = (2*m*(E-U0)/h^2)^0.5;
+
+cos1 = cos(mu.*a).*cos(lambda.*b)-(mu^2+lambda^2)/(2*mu*lambda)*sin(mu*a)*sin(lambda*b)-cos(k*(a+b));
+end
