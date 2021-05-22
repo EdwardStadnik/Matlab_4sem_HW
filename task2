@@ -3,7 +3,6 @@ function [matrix] = KronigPenney(k_input, m_input, a_input, b_input, U0_input, E
 global k U0 h m a b Emax e
 
 e = 1.60218 * 10^(-19);
-%h=1.054571817*10^(-27)/((1.602176634*10^(-12)*10^(-14)).^0.5);
 h = 6.626070*10^(-34)/(2*pi);
 a = a_input*10^(-9);
 b = b_input*10^(-9);
